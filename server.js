@@ -3,6 +3,7 @@ const express = require('express');
 
 //an instance of express
 const app = express();
+app.use(express.json())
 
 //sample in-memory storage for todo items
 let todo=[];
