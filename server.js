@@ -1,24 +1,42 @@
 // Using express
 const express = require('express');
+const mongoose = require('mongoose');
 
 //an instance of express
 const app = express();
 app.use(express.json())
 
 //sample in-memory storage for todo items
-let todos=[];
+//let todos=[];
+
+//connect to mongodb
+mongoose.connect('mongodb://localhost:27017/mern-app')
+.then(() => {console.log('Connected to MongoDB')
+})
+.catch((err) => {console.log( err)
+})
+
+//creating schema
+const todoModel =mongoose.model('Todo', todoSchema);
 
 //create a new todo item
-app.post('/todos', (req, res) => {
+app.post('/todos', async(req, res) => {
   const {title, description} = req.body;
-    const newTodo = {
-      id: todos.length + 1,
-      title,
-      description
-    };
-    todos.push(newTodo);
-    console.log(todos);
-    res.status(201).json(newTodo);
+    //const newTodo = {
+    //  id: todos.length + 1,
+    //  title,
+    //  description
+    //};
+    //todos.push(newTodo);
+    //console.log(todos);
+    try{
+        const newTodo = new todoModel({title,description });
+        await newTodo.save();
+        res.status(201).json(newTodo);
+    }catch(error){
+        console.log(error)
+        res.status(500);
+    }
 })
 
 //get all items
