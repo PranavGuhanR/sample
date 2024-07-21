@@ -21,6 +21,12 @@ app.post('/todos', (req, res) => {
     res.status(201).json(newTodo);
 })
 
+//get all items
+
+app.get('/todos', (req, res) => {
+    res.json(todos);
+})    
+
 // start the server
 const port=3000;
 app.listen(port, () => {
